@@ -1,0 +1,30 @@
+server:
+  port: 8080
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 20
+
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+
+bloomguard:
+  redis:
+    connection-pool-size: 128
+    connection-minimum-idle: 48
+
+  security:
+    api-key-enabled: true
+
+  rate-limit:
+    enabled: true
+    default-limit: 5000
+
+logging:
+  level:
+    root: WARN
+    com.bloomguard: INFO
+  pattern:
+    console: '{"timestamp":"%d{ISO8601}","level":"%level","logger":"%logger","message":"%msg","thread":"%thread"}%n'

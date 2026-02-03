@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bloomguard_dev
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+bloomguard:
+  security:
+    api-key-enabled: false
+
+  rate-limit:
+    enabled: false
+
+logging:
+  level:
+    com.bloomguard: DEBUG
+    org.springframework.web: DEBUG

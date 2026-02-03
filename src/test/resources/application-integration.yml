@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: false
+
+bloomguard:
+  security:
+    api-key-enabled: false
+
+  rate-limit:
+    enabled: false
+
+  backup:
+    enabled: false
+
+  scheduler:
+    enabled: false
+
+logging:
+  level:
+    root: WARN
+    com.bloomguard: INFO

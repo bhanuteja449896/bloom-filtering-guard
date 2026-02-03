@@ -1,0 +1,101 @@
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
+
+spring:
+  application:
+    name: bloomguard
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bloomguard}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: BloomGuardPool
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 3000ms
+
+  cache:
+    type: caffeine
+
+bloomguard:
+  redis:
+    connection-pool-size: 64
+    connection-minimum-idle: 24
+
+  security:
+    api-key-enabled: ${API_KEY_ENABLED:true}
+    default-api-key: ${DEFAULT_API_KEY:}
+
+  rate-limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    default-limit: ${RATE_LIMIT_DEFAULT:1000}
+
+  backup:
+    enabled: ${BACKUP_ENABLED:true}
+
+  fraud:
+    verify-false-positives: ${VERIFY_FALSE_POSITIVES:true}
+
+  rotation:
+    cron: "0 0 0 * * ?"
+
+  cleanup:
+    enabled: true
+    cron: "0 0 2 * * ?"
+    audit-retention-days: 30
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: true
+    db:
+      enabled: true
+  metrics:
+    tags:
+      application: bloomguard
+
+logging:
+  level:
+    root: INFO
+    com.bloomguard: INFO
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
